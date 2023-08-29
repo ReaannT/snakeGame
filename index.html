@@ -65,7 +65,7 @@ snake.pop();
 }
 if (head.x < 0 || head.x >= 300 || head.y < 0 || head.y >= 300) {
 clearInterval(gameLoop);
-alert('Game Over, Bulok ka!');
+alert('Game Over!');
 }
 for (let i = 1; i < snake.length; i++) {
 if (snake[i].x === head.x && snake[i].y === head.y) {
