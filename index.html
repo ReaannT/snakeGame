@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#game-board {
+width: 300px;
+height: 300px;
+justify-content: center;
+align-items: center;
+border: 1px solid gray;
+position: relative;
+
+
+}
+.snake-part {
+width: 20px;
+height: 20px;
+background-color: orange;
+position: absolute;
+}
+#food {
+width: 20px;
+height: 20px;
+background-color: pink;
+position: absolute;
+}
+</style>
+</head>
+<body>
+<div id="game-board"></div>
+<script>
+const gameBoard = document.getElementById('game-board');
+let snake = [{x: 100, y: 100}];
+let direction = 'right';
+let food = {x: 200, y: 200};
+function drawSnake() {
+gameBoard.innerHTML = '';
+snake.forEach(part => {
+const snakePart = document.createElement('div');
+snakePart.className = 'snake-part';
+snakePart.style.left = part.x + 'px';
+snakePart.style.top = part.y + 'px';
+gameBoard.appendChild(snakePart);
+});
+}
+function drawFood() {
+const foodElement = document.createElement('div');
+foodElement.id = 'food';
+foodElement.style.left = food.x + 'px';
+foodElement.style.top = food.y + 'px';
+gameBoard.appendChild(foodElement);
+}
+function update() {
+const head = {...snake[0]};
+if (direction === 'right') head.x += 20;
+else if (direction === 'left') head.x -= 20;
+else if (direction === 'down') head.y += 20;
+else if (direction === 'up') head.y -= 20;
+snake.unshift(head);
+if (head.x === food.x && head.y === food.y) {
+food.x = Math.floor(Math.random() * 15) * 20;
+food.y = Math.floor(Math.random() * 15) * 20;
+} else {
+snake.pop();
+}
+if (head.x < 0 || head.x >= 300 || head.y < 0 || head.y >= 300) {
+clearInterval(gameLoop);
+alert('Game Over, Bulok ka!');
+}
+for (let i = 1; i < snake.length; i++) {
+if (snake[i].x === head.x && snake[i].y === head.y) {
+clearInterval(gameLoop);
+alert('Game Over');
+}
+}
+drawSnake();
+drawFood();
+}
+document.addEventListener('keydown', (event) => {
+if (event.key === 'ArrowRight' && direction !== 'left') direction = 'right';
+else if (event.key === 'ArrowLeft' && direction !== 'right') direction = 'left';
+else if (event.key === 'ArrowDown' && direction !== 'up') direction = 'down';
+else if (event.key === 'ArrowUp' && direction !== 'down') direction = 'up';
+});
+drawSnake();
+drawFood();
+const gameLoop = setInterval(update, 200);
+</script>
+</body>
+</html>
